@@ -1,0 +1,8 @@
+- name: Install minikube package
+  apt:
+    deb: https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+    state: present
+
+- name: Start the cluster with su command
+  command: su - {{ ansible_user_id }} -c "minikube start"
+  become: yes
