@@ -4,5 +4,5 @@
     state: present
 
 - name: Start the cluster with su command
-  command: su - {{ ansible_user_id }} -c "minikube start"
+  command: su - "{{ ansible_ssh_user }}" -c "minikube start"
   become: yes
