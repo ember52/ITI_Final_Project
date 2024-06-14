@@ -1,0 +1,9 @@
+- name: Install Minikube package
+  yum:
+    name: https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
+    state: present
+    update_cache: yes
+    disable_gpg_check: yes
+
+- name: Start Minikube cluster
+  command: su - {{ current_user.stdout }} -c "minikube start"

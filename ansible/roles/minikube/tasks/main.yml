@@ -1,8 +1,5 @@
-- include_tasks: docker.yml
-  tags: docker
+- include_tasks: ubuntu.yml
+  when: ansible_facts['distribution'] == "Ubuntu"
 
-- include_tasks: kubectl.yml
-  tags: kubectl
-
-- include_tasks: minikube.yml
-  tags: minikube
+- include_tasks: centos.yml
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"

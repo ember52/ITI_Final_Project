@@ -1,0 +1,7 @@
+- include_tasks: centos/docker.yml
+
+- include_tasks: centos/kubectl.yml
+
+- include_tasks: centos/minikube.yml
+
+- include_tasks: centos/terraform.yml

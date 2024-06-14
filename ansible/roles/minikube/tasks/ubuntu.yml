@@ -1,0 +1,7 @@
+- include_tasks: ubuntu/docker.yml
+
+- include_tasks: ubuntu/kubectl.yml
+
+- include_tasks: ubuntu/minikube.yml
+
+- include_tasks: ubuntu/terraform.yml

@@ -1,0 +1,6 @@
+[my_machine]
+localhost
+
+[aws_ec2]
+ubuntu ansible_host=xxx.xxx.xxx.xxx ansible_user=ubuntu
+redhat ansible_host=yyy.yyy.yyy.yyy ansible_user=ec2-user

@@ -1,0 +1,26 @@
+- name: Install prerequisites
+  yum:
+    name:
+      - yum-utils
+    state: present
+    update_cache: yes
+
+- name: Add HashiCorp GPG key
+  rpm_key:
+    state: present
+    key: https://rpm.releases.hashicorp.com/gpg
+
+- name: Add HashiCorp YUM repository
+  yum_repository:
+    name: hashicorp
+    description: "HashiCorp Stable - $basearch"
+    baseurl: https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable
+    gpgcheck: yes
+    gpgkey: https://rpm.releases.hashicorp.com/gpg
+    enabled: yes
+
+- name: Install Terraform
+  yum:
+    name: terraform
+    state: present
+    update_cache: yes

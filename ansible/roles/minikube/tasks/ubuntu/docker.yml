@@ -1,4 +1,8 @@
-
+- name: Get current user
+  command: whoami
+  register: current_user
+  become: no
+  
 - name: Install docker prerquests
   apt:
     pkg:
@@ -43,7 +47,7 @@
 
 - name: Add user to docker group
   user:
-    name: "{{ ansible_ssh_user }}"
+    name: "{{ current_user.stdout }}"
     groups: docker
     append: yes
 

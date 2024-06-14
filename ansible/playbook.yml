@@ -1,8 +1,7 @@
 - name: install minikube
-  hosts: localhost
-  connection: local
-  remote_user: ubuntu
-  gather_facts: true
+  hosts: my_machine # use aws_ec2 for remote machines
+  connection: local # remove for remote connection
   become: yes
+  gather_facts: true
   roles:
     - minikube

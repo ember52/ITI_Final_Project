@@ -3,6 +3,5 @@
     deb: https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
     state: present
 
-- name: Start the cluster with su command
-  command: su - "{{ ansible_ssh_user }}" -c "minikube start"
-  become: yes
+- name: Start the cluster
+  command: su - "{{ current_user.stdout }}" -c "minikube start"
