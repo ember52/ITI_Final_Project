@@ -38,7 +38,9 @@ resource "kubernetes_deployment" "nexus" {
 # Create a Kubernetes service
 resource "kubernetes_service" "nexus_service" {
   metadata {
-    name = "nexus-service"
+    name      = "nexus-service"
+    namespace = "tools"
+
   }
   spec {
     selector = {
