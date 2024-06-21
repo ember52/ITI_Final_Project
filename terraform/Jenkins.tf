@@ -35,6 +35,9 @@ resource "kubernetes_deployment" "jenkins" {
             name       = "jenkins-home"
             mount_path = "/var/jenkins_home"
           }
+          security_context {
+            run_as_user = 0
+          }
         }
         volume {
           name = "jenkins-home"
@@ -45,6 +48,7 @@ resource "kubernetes_deployment" "jenkins" {
       }
     }
   }
+  # wait_for_rollout = false
 }
 
 # Create a Kubernetes service for Jenkins
