@@ -36,3 +36,19 @@ kubectl exec -it nexus-6f69db7798-k6kkn -c nexus -n tools -- bash
 
 Create a new repository for docker files
 ![Screenshot from 2024-06-22 00-15-05](https://github.com/ember52/ITI_Final_Project/assets/69374852/d4319ede-0587-4dbd-86b8-881dc7a361c2)
+
+
+## 4- dev namespace will run two pods: one for nodejs application and another for MySQL DB
+![image](https://github.com/ember52/ITI_Final_Project/assets/69374852/280602b0-659f-4275-aaa1-0f35db4f2b0d)
+
+## 5- Create a Jenkins pipeline job to build a docker image from the nodejs app and push to nexus repository.
+(1) configuration
+![image](https://github.com/ember52/ITI_Final_Project/assets/69374852/a22a11c0-0d13-4b1b-aa3d-5d2a19e5fdfa)
+(2) configuration con'd
+![image](https://github.com/ember52/ITI_Final_Project/assets/69374852/51ac4144-2cc0-469b-9c3d-76c94526dfeb)
+(3) Build results
+![image](https://github.com/ember52/ITI_Final_Project/assets/69374852/0c92e987-d1dd-4238-92dc-c2d271b3f6f9)
+(4) Image on docker-repo in nexus
+![Screenshot from 2024-06-22 17-32-23](https://github.com/ember52/ITI_Final_Project/assets/69374852/fa912486-6c6b-4ba4-96b5-be678f7a90da)
+
+## 6- Create another Jenkins pipeline job that run the Docker container on the requested environment from nexus on minikube.
