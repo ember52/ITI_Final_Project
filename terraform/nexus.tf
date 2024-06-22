@@ -27,7 +27,12 @@ resource "kubernetes_deployment" "nexus" {
           name  = "nexus"
           image = "sonatype/nexus3"
           port {
+            name = "nexus"
             container_port = 8081
+          }
+          port {
+            name = "docker"
+            container_port = 5000
           }
         }
       }
@@ -47,8 +52,14 @@ resource "kubernetes_service" "nexus_service" {
       app = kubernetes_deployment.nexus.metadata[0].labels.app
     }
     port {
+      name = "nexus"
       port        = 8081
       target_port = 8081
+    }
+    port {
+      name = "docker"
+      port = 5000
+      target_port = 5000
     }
     type = "NodePort"
   }
