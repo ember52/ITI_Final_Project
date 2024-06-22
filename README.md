@@ -36,6 +36,8 @@ kubectl exec -it nexus-6f69db7798-k6kkn -c nexus -n tools -- bash
 
 Create a new repository for docker files
 ![Screenshot from 2024-06-22 00-15-05](https://github.com/ember52/ITI_Final_Project/assets/69374852/d4319ede-0587-4dbd-86b8-881dc7a361c2)
+Activate "Docker Bearer Token Realm" in realms, to authenticate the user and issues a bearer token.
+![image](https://github.com/ember52/ITI_Final_Project/assets/69374852/80ad9925-2505-4b30-992f-30d84a68b674)
 
 
 ## 4- dev namespace will run two pods: one for nodejs application and another for MySQL DB
