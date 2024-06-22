@@ -4,7 +4,7 @@ resource "kubernetes_secret" "app-secret" {
     namespace = "dev"
   }
   data = {
-    HOST     = "mysql-service"
+    HOST     = "mysql"
     USERNAME = "cloud44"
     PASSWORD = 1234
     DATABASE = "db_final"
