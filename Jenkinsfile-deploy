@@ -1,0 +1,50 @@
+pipeline {
+        agent {
+        kubernetes {
+            label 'jenkins-slave'
+            yaml """
+            apiVersion: v1
+            kind: Pod
+            spec:
+              containers:
+              - name: kubectl
+                image: lachlanevenson/k8s-kubectl
+                command:
+                - cat
+                tty: true
+            """
+        }
+    }
+    // agent { label 'minikube' }
+    
+    stages {
+        stage('Clone Repository') {
+            steps {
+                container('jnlp') {
+                    script {
+                        sh 'git clone -b main https://github.com/ember52/ITI_Final_Project.git'
+                        sh 'ls -la'
+                        sh 'pwd'
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Image on Minikube') {
+            steps {
+                container('kubectl') {
+                    // Change directory to the cloned repository
+                    script {
+                        dir(' ITI_Final_Project') {
+                            sh 'pwd'
+                            // Deploy the app to Cluster
+                            sh """
+                            kubectl apply -f app-deployment
+                            """
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
