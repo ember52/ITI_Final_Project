@@ -34,6 +34,16 @@ resource "kubernetes_deployment" "nexus" {
             name = "docker"
             container_port = 5000
           }
+          volume_mount {
+            name       = "nexus-repos"
+            mount_path = "/nexus"
+          }
+        }
+        volume {
+          name = "nexus-repos"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.nexus_pvc.metadata[0].name
+          }
         }
       }
     }
