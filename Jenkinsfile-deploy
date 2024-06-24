@@ -1,48 +1,94 @@
 pipeline {
-        agent {
+    agent {
         kubernetes {
-            label 'jenkins-slave'
+            label 'ubuntu-agent'
+            defaultContainer 'ubuntu'
             yaml """
             apiVersion: v1
             kind: Pod
+            metadata:
+              labels:
+                jenkins: slave
+                jenkins/label-digest: "03ddc3eddf95d5470d5c7fb6d2937abaeca3b79e"
+                jenkins/label: ubuntu-agent
+              name: ubuntu-agent
+              namespace: tools
             spec:
+              serviceAccountName: jenkins
               containers:
-              - name: kubectl
-                image: lachlanevenson/k8s-kubectl
+              - name: ubuntu
+                image: ubuntu:latest
                 command:
                 - cat
                 tty: true
+                volumeMounts:
+                - mountPath: /home/jenkins/agent
+                  name: workspace-volume
+                  readOnly: false
+                - mountPath: /root/.kube
+                  name: kubeconfig
+                  readOnly: true
+                - name: docker-sock
+                  mountPath: /var/run/docker.sock
+              volumes:
+              - name: workspace-volume
+                emptyDir: {}
+              - name: kubeconfig
+                projected:
+                  sources:
+                  - serviceAccountToken:
+                      path: token
+                      expirationSeconds: 86400
+              - name: docker-sock
+                hostPath:
+                  path: /var/run/docker.sock
             """
         }
     }
-    // agent { label 'minikube' }
-    
-    stages {
-        stage('Clone Repository') {
-            steps {
-                container('jnlp') {
-                    script {
-                        sh 'git clone -b main https://github.com/ember52/ITI_Final_Project.git'
-                        sh 'ls -la'
-                        sh 'pwd'
-                    }
-                }
-            }
-        }
 
-        stage('Deploy Image on Minikube') {
+    environment {
+        NEXUS_REPO = "10.102.20.13:5000/repository/docker-repo" // URL to your Nexus repository
+        IMAGE_NAME = "nodejs-app" // Name of the Docker image in Nexus
+        IMAGE_TAG = "latest" // Tag of the Docker image
+    }
+
+    stages {
+        stage('Deploy Application') {
             steps {
-                container('kubectl') {
-                    // Change directory to the cloned repository
-                    script {
-                        dir(' ITI_Final_Project') {
-                            sh 'pwd'
-                            // Deploy the app to Cluster
-                            sh """
-                            kubectl apply -f app-deployment
-                            """
-                        }
-                    }
+                container('ubuntu') {
+                    // Install kubectl in the container
+                    sh 'apt-get update -y'
+                    sh 'apt-get install curl -y'
+                    sh 'curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl'
+                    sh 'chmod +x ./kubectl'
+                    sh 'mv ./kubectl /usr/local/bin/kubectl'
+
+                    // Write deployment manifest to a file
+                    writeFile file: 'deployment.yaml', text: """
+                        apiVersion: apps/v1
+                        kind: Deployment
+                        metadata:
+                          name: nodejs-app
+                          namespace: dev
+                        spec:
+                          replicas: 1
+                          selector:
+                            matchLabels:
+                              app: nodejs-app
+                          template:
+                            metadata:
+                              labels:
+                                app: nodejs-app
+                            spec:
+                              containers:
+                              - name: nodejs-app
+                                image: 10.102.20.13:5000/repository/docker-repo/nodejs-app:latest
+                                ports:
+                                - containerPort: 3000
+                    """
+
+                    // Apply the deployment using kubectl
+                    sh 'kubectl apply -f deployment.yaml'
                 }
             }
         }
