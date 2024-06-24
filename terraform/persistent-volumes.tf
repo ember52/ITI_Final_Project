@@ -15,6 +15,7 @@ resource "kubernetes_persistent_volume" "jenkins_pv" {
         type = "DirectoryOrCreate"  # Kubernetes will create /mnt/data if it doesn't exist
       }
     }
+    
   }
 }
 
@@ -33,7 +34,7 @@ resource "kubernetes_persistent_volume_claim" "jenkins_pvc" {
       }
     }
     storage_class_name = ""  # Replace with your desired StorageClass
-    # volume_name        = kubernetes_persistent_volume.jenkins_pv.metadata[0].name  # Links to the PV
+    volume_name        = kubernetes_persistent_volume.jenkins_pv.metadata[0].name  # Links to the PV
   }
 }
 
@@ -72,6 +73,6 @@ resource "kubernetes_persistent_volume_claim" "nexus_pvc" {
       }
     }
     storage_class_name = ""  # Replace with your desired StorageClass
-    # volume_name        = kubernetes_persistent_volume.jenkins_pv.metadata[0].name  # Links to the PV
+    volume_name        = kubernetes_persistent_volume.nexus_pv.metadata[0].name  # Links to the PV
   }
 }
