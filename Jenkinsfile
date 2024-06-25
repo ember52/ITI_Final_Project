@@ -1,28 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            label 'jenkins-slave'
-            yaml """
-            apiVersion: v1
-            kind: Pod
-            spec:
-              containers:
-              - name: kaniko
-                image: gcr.io/kaniko-project/executor:debug
-                command:
-                - cat
-                tty: true
-                volumeMounts:
-                - name: kaniko-secret
-                  mountPath: /kaniko/.docker
-              volumes:
-              - name: kaniko-secret
-                secret:
-                  secretName: kaniko-secret
-                  items:
-                  - key: config.json
-                    path: config.json
-            """
+            yamlFile 'kaniko-build-agent.yaml' 
         }
     }
     stages {
