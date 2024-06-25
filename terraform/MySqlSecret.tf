@@ -4,10 +4,11 @@ resource "kubernetes_secret" "mysql_secret" {
     namespace = "dev"
   }
   data = {
-    HOST     = base64encode(var.mysql_host)
-    USERNAME = base64encode(var.mysql_username)
-    PASSWORD = base64encode(var.mysql_password)
-    DATABASE = base64encode(var.mysql_database)
+    HOST                = var.mysql_host
+    USERNAME            = var.mysql_username
+    PASSWORD            = var.mysql_password
+    DATABASE            = var.mysql_database
+    MYSQL_ROOT_PASSWORD = var.mysql_root_password
   }
   type = "Opaque"
 }

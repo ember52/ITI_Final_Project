@@ -26,7 +26,7 @@ resource "kubernetes_deployment" "mysql" {
             value_from {
               secret_key_ref {
                 name = kubernetes_secret.mysql_secret.metadata[0].name
-                key  = "PASSWORD"
+                key  = "MYSQL_ROOT_PASSWORD"
               }
             }
           }
@@ -45,6 +45,15 @@ resource "kubernetes_deployment" "mysql" {
               secret_key_ref {
                 name = kubernetes_secret.mysql_secret.metadata[0].name
                 key  = "USERNAME"
+              }
+            }
+          }
+          env {
+            name = "MYSQL_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.mysql_secret.metadata[0].name
+                key  = "PASSWORD"
               }
             }
           }

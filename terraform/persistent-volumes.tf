@@ -7,15 +7,15 @@ resource "kubernetes_persistent_volume" "jenkins_pv" {
     capacity = {
       storage = "10Gi"
     }
-    access_modes = ["ReadWriteOnce"]
-    storage_class_name = "standard"  # Replace with the name of your standard storage class
+    access_modes       = ["ReadWriteOnce"]
+    storage_class_name = "standard" # Replace with the name of your standard storage class
     persistent_volume_source {
       host_path {
         path = "/mnt/data"
-        type = "DirectoryOrCreate"  # Kubernetes will create /mnt/data if it doesn't exist
+        type = "DirectoryOrCreate" # Kubernetes will create /mnt/data if it doesn't exist
       }
     }
-    
+
   }
 }
 
@@ -33,8 +33,8 @@ resource "kubernetes_persistent_volume_claim" "jenkins_pvc" {
         storage = "10Gi"
       }
     }
-    storage_class_name = ""  # Replace with your desired StorageClass
-    volume_name        = kubernetes_persistent_volume.jenkins_pv.metadata[0].name  # Links to the PV
+    storage_class_name = ""                                                       # Replace with your desired StorageClass
+    volume_name        = kubernetes_persistent_volume.jenkins_pv.metadata[0].name # Links to the PV
   }
 }
 
@@ -47,7 +47,7 @@ resource "kubernetes_persistent_volume" "nexus_pv" {
     capacity = {
       storage = "5Gi"
     }
-    access_modes = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteOnce"]
     storage_class_name = "standard"
     persistent_volume_source {
       host_path {
@@ -72,7 +72,7 @@ resource "kubernetes_persistent_volume_claim" "nexus_pvc" {
         storage = "5Gi"
       }
     }
-    storage_class_name = ""  # Replace with your desired StorageClass
-    volume_name        = kubernetes_persistent_volume.nexus_pv.metadata[0].name  # Links to the PV
+    storage_class_name = ""                                                     # Replace with your desired StorageClass
+    volume_name        = kubernetes_persistent_volume.nexus_pv.metadata[0].name # Links to the PV
   }
 }
