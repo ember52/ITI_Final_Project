@@ -46,51 +46,46 @@ pipeline {
         }
     }
 
-    environment {
-        NEXUS_REPO = "10.102.20.13:5000/repository/docker-repo" // URL to your Nexus repository
-        IMAGE_NAME = "nodejs-app" // Name of the Docker image in Nexus
-        IMAGE_TAG = "latest" // Tag of the Docker image
-    }
-
     stages {
-        stage('Deploy Application') {
+        stage('Install required packages') {
             steps {
                 container('ubuntu') {
-                    // Install kubectl in the container
+                    // Install kubectl and requirements in the container
                     sh 'apt-get update -y'
+                    sh 'apt-get install git -y'
                     sh 'apt-get install curl -y'
                     sh 'curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl'
                     sh 'chmod +x ./kubectl'
                     sh 'mv ./kubectl /usr/local/bin/kubectl'
-
-                    // Write deployment manifest to a file
-                    writeFile file: 'deployment.yaml', text: """
-                        apiVersion: apps/v1
-                        kind: Deployment
-                        metadata:
-                          name: nodejs-app
-                          namespace: dev
-                        spec:
-                          replicas: 1
-                          selector:
-                            matchLabels:
-                              app: nodejs-app
-                          template:
-                            metadata:
-                              labels:
-                                app: nodejs-app
-                            spec:
-                              containers:
-                              - name: nodejs-app
-                                image: 10.102.20.13:5000/repository/docker-repo/nodejs-app:latest
-                                ports:
-                                - containerPort: 3000
-                    """
-
-                    // Apply the deployment using kubectl
-                    sh 'kubectl apply -f deployment.yaml'
                 }
             }
         }
+
+        stage('Clone app Repository') {
+            steps {
+                container('ubuntu') {
+                    script {
+                        sh 'git clone -b main https://github.com/ember52/ITI_Final_Project'
+                        sh 'ls -la'
+                    }
+                }
+            }
+        }
+
+        stage('Deploy application from image on Minikube') {
+            steps {
+                container('ubuntu') {
+                    // Change directory to the cloned repository
+                    script {
+                        dir('Final') {
+                            // Deploy the app to Cluster
+                            sh """
+                            kubectl apply -f app-deployment
+                            """
+                        }
+                    }
+                }
+            }
+        }      
     }
 }
