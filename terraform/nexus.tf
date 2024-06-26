@@ -63,11 +63,13 @@ resource "kubernetes_service" "nexus_service" {
       name        = "nexus"
       port        = 8081
       target_port = 8081
+      node_port = 30003
     }
     port {
       name        = "docker"
       port        = 5000
       target_port = 5000
+      node_port = 30004
     }
     type = "NodePort"
   }
