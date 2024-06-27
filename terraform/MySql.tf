@@ -1,11 +1,12 @@
-# Create a Kubernetes deployment for MySql
-resource "kubernetes_deployment" "mysql" {
+# # Create a Kubernetes deployment for MySql
+resource "kubernetes_stateful_set" "mysql" {
   metadata {
     name      = "mysql"
     namespace = "dev"
   }
   spec {
-    replicas = 1
+    service_name = "mysql"
+    replicas     = 1
     selector {
       match_labels = {
         app = "mysql"
@@ -69,20 +70,37 @@ resource "kubernetes_deployment" "mysql" {
           port {
             container_port = 3306
           }
+          volume_mount {
+            name       = "mysql-pvc"
+            mount_path = "/var/lib/mysql"
+          }
         }
+      }
+    }
+    volume_claim_template {
+      metadata {
+        name = "mysql-pvc"
+      }
+      spec {
+        access_modes = ["ReadWriteOnce"]
+        resources {
+          requests = {
+            storage = "1Gi"
+          }
+        }
+        volume_name = kubernetes_persistent_volume.mysql_pv.metadata[0].name # Links to the PV
       }
     }
   }
 }
 
-
-# Create a Kubernetes service for MySql deployment
 resource "kubernetes_service" "mysql" {
   metadata {
     name      = "mysql"
     namespace = "dev"
   }
   spec {
+    cluster_ip = "None"
     selector = {
       app = "mysql"
     }
@@ -90,7 +108,5 @@ resource "kubernetes_service" "mysql" {
       port        = 3306
       target_port = 3306
     }
-    type = "ClusterIP"
-
   }
 }

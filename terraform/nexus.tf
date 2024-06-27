@@ -21,6 +21,15 @@ resource "kubernetes_deployment" "nexus" {
         }
       }
       spec {
+        init_container {
+          name    = "init-permissions"
+          image   = "busybox"
+          command = ["sh", "-c", "chown -R 200 /nexus-data"]
+          volume_mount {
+            name       = "nexus-repos"
+            mount_path = "/nexus-data"
+          }
+        }
         container {
           name  = "nexus"
           image = "sonatype/nexus3"
@@ -34,9 +43,16 @@ resource "kubernetes_deployment" "nexus" {
           }
           volume_mount {
             name       = "nexus-repos"
-            mount_path = "/nexus"
+            mount_path = "/nexus-data"
+          }
+          security_context {
+            run_as_user = 200
           }
         }
+        security_context {
+          fs_group = 200
+        }
+
         volume {
           name = "nexus-repos"
           persistent_volume_claim {
@@ -63,13 +79,13 @@ resource "kubernetes_service" "nexus_service" {
       name        = "nexus"
       port        = 8081
       target_port = 8081
-      node_port = 30003
+      node_port   = 30003
     }
     port {
       name        = "docker"
       port        = 5000
       target_port = 5000
-      node_port = 30004
+      node_port   = 30004
     }
     type = "NodePort"
   }
