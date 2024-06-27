@@ -49,7 +49,7 @@ terraform apply
 
 to get initialAdminPassword
 ```
-kubectl exec -it [jenkins-pod-name] -c jenkins -n tools -- /bin/bash -c cat /var/jenkins_home/secrets/initialAdminPassword
+kubectl exec -it [jenkins-pod-name] -c jenkins -n tools -- /bin/bash -c "cat /var/jenkins_home/secrets/initialAdminPassword"
 ```
 ![Screenshot from 2024-06-21 23-09-42](https://github.com/ember52/ITI_Final_Project/assets/69374852/a89cba58-0130-48d7-aa1b-4675e9ec9fdd)
 
@@ -73,7 +73,7 @@ Install Kubernetes Plugin
 
 to get initial Password
 ```
-kubectl exec -it [nexus-pod-name] -c nexus -n tools -- /bin/bash -c cat /nexus-data/admin.password
+kubectl exec -it [nexus-pod-name] -c nexus -n tools -- /bin/bash -c cat "/nexus-data/admin.password"
 ```
 ![Screenshot from 2024-06-22 00-13-35](https://github.com/ember52/ITI_Final_Project/assets/69374852/f2b50799-df32-4edf-9b1a-083fa4844825)
 
