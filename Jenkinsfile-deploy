@@ -38,7 +38,7 @@ pipeline {
                 container('ubuntu') {
                     // Change directory to the cloned repository
                     script {
-                        dir('Final') {
+                        dir('ITI_Final_Project') {
                             // Deploy the app to Cluster
                             sh """
                             kubectl apply -f app-deployment
