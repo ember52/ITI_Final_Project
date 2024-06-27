@@ -1,38 +1,93 @@
-Role Name
-=========
+# Ansible Role for Installing Minikube and Terraform
 
-A brief description of the role goes here.
+This Ansible role installs and configures Minikube and Terraform on both Ubuntu and CentOS/RedHat systems. The role includes tasks to install Docker, kubectl, Minikube, and Terraform, and ensures that Minikube is started on the target machine.
 
-Requirements
-------------
+## Supported Platforms
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Ubuntu
+- CentOS
+- RedHat
 
-Role Variables
---------------
+## Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+This role does not require any specific variables. It detects the operating system and applies the appropriate installation tasks automatically.
 
-Dependencies
-------------
+## Usage
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/mahmoud254/jenkins_nodejs_example.git
+    cd jenkins_nodejs_example/ansible
+    ```
 
-Example Playbook
-----------------
+2. Create an inventory file:
+    ```ini
+    [minikube]
+    your_server_address
+    ```
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+3. Run the playbook:
+    ```bash
+    ansible-playbook -i inventory.ini site.yml
+    ```
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+## Tasks
 
-License
--------
+### Main Task File
 
-BSD
+The main task file includes conditional imports based on the detected operating system.
 
-Author Information
-------------------
+- **Path:** `ansible/roles/minikube/tasks/main.yml`
+- **Description:** This file includes tasks specific to Ubuntu and CentOS/RedHat systems based on the detected OS distribution.
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+### CentOS/RedHat Tasks
+
+#### Docker Installation
+
+- **Path:** `ansible/roles/minikube/tasks/centos/docker.yml`
+- **Description:** Installs Docker and its dependencies, adds the current user to the Docker group, and ensures the Docker service is started and enabled.
+
+#### Kubectl Installation
+
+- **Path:** `ansible/roles/minikube/tasks/centos/kubectl.yml`
+- **Description:** Downloads and installs the latest stable release of kubectl.
+
+#### Minikube Installation
+
+- **Path:** `ansible/roles/minikube/tasks/centos/minikube.yml`
+- **Description:** Installs Minikube and starts the Minikube cluster.
+
+#### Terraform Installation
+
+- **Path:** `ansible/roles/minikube/tasks/centos/terraform.yml`
+- **Description:** Installs the HashiCorp GPG key, adds the HashiCorp YUM repository, and installs Terraform.
+
+### Ubuntu Tasks
+
+#### Docker Installation
+
+- **Path:** `ansible/roles/minikube/tasks/ubuntu/docker.yml`
+- **Description:** Installs Docker prerequisites, adds Docker’s official GPG key and repository, installs Docker, and ensures the Docker service is started and enabled.
+
+#### Kubectl Installation
+
+- **Path:** `ansible/roles/minikube/tasks/ubuntu/kubectl.yml`
+- **Description:** Downloads and installs the latest stable release of kubectl.
+
+#### Minikube Installation
+
+- **Path:** `ansible/roles/minikube/tasks/ubuntu/minikube.yml`
+- **Description:** Installs Minikube and starts the Minikube cluster.
+
+#### Terraform Installation
+
+- **Path:** `ansible/roles/minikube/tasks/ubuntu/terraform.yml`
+- **Description:** Installs prerequisites, adds the HashiCorp GPG key and APT repository, and installs Terraform.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Author
+
+minasaeedbasta
