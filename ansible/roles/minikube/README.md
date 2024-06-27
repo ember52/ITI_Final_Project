@@ -16,19 +16,13 @@ This role does not require any specific variables. It detects the operating syst
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/mahmoud254/jenkins_nodejs_example.git
-    cd jenkins_nodejs_example/ansible
+    git clone https://github.com/ember52/ITI_Final_Project.git
+    cd ITI_Final_Project/ansible
     ```
 
-2. Create an inventory file:
-    ```ini
-    [minikube]
-    your_server_address
-    ```
-
-3. Run the playbook:
+2. Run the playbook:
     ```bash
-    ansible-playbook -i inventory.ini site.yml
+    ansible-playbook -i inventory.ini playbook.yml
     ```
 
 ## Tasks
