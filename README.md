@@ -23,8 +23,8 @@ ansible-playbook -i inventory playbook.yml
 
 - Create [Cluster Role, Service account, Cluster Role Binding](terraform/service-account.tf)
 - Create Secrets for [MySQL](terraform/MySqlSecret.tf) and [Nexus](terraform/nexus-secret.tf)
-- Create Deployment and service for [Jenkins](terraform/Jenkins.tf), [Nexus](terraform/nexus.tf), and [MySQL](terraform/MySql.tf),
-- Create Service for [app](terraform/appService.tf)
+- Create Deployment and service for [Jenkins](terraform/Jenkins.tf), [Nexus](terraform/nexus.tf), and [MySQL](terraform/MySql.tf)
+- Create Service for [NodeJs-app](terraform/appService.tf)
 - Create [Persistent volumes for Jenkins and Nexus](terraform/persistent-volumes.tf)
 - Create namespaces ["dev"](terraform/namespaces.tf) and ["tools"](terraform/namespaces.tf)
 
@@ -49,7 +49,7 @@ terraform apply
 
 to get initialAdminPassword
 ```
-kubectl exec -it jenkins-8ddb87c58-dq659 -c jenkins -n tools -- bash
+kubectl exec -it [jenkins-pod-name] -c jenkins -n tools -- /bin/bash -c cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 ![Screenshot from 2024-06-21 23-09-42](https://github.com/ember52/ITI_Final_Project/assets/69374852/a89cba58-0130-48d7-aa1b-4675e9ec9fdd)
 
@@ -73,11 +73,10 @@ Install Kubernetes Plugin
 
 to get initial Password
 ```
-kubectl exec -it nexus-6f69db7798-k6kkn -c nexus -n tools -- bash
+kubectl exec -it [nexus-pod-name] -c nexus -n tools -- /bin/bash -c cat /nexus-data/admin.password
 ```
 ![Screenshot from 2024-06-22 00-13-35](https://github.com/ember52/ITI_Final_Project/assets/69374852/f2b50799-df32-4edf-9b1a-083fa4844825)
-(2)
-![Screenshot from 2024-06-22 00-14-13](https://github.com/ember52/ITI_Final_Project/assets/69374852/acfed911-f2b3-4e67-9f84-064a7da46e92)
+
 
 Create a new repository for docker files
 ![Screenshot from 2024-06-22 00-15-05](https://github.com/ember52/ITI_Final_Project/assets/69374852/d4319ede-0587-4dbd-86b8-881dc7a361c2)
