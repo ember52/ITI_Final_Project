@@ -17,6 +17,10 @@
 ```
 ansible-playbook -i inventory playbook.yml
 ```
+  - Add the following flag if the user requires a password to run the script [--ask-become-pass].
+```
+ansible-playbook -i inventory playbook.yml --ask-become-pass
+```
 ![image](https://github.com/ember52/ITI_Final_Project/assets/69374852/6dfa1027-49ea-424e-9e60-0d92171234be)
 
 <h3 id=task2">2. Provision required K8s resources and namespaces "dev" and "tools"</h3>
